@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Book RDP — Remote Desktop Protocol</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">E·BOOK / RDP</div>
+    <ul class="nav-links">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#keunggulan">Keunggulan</a></li>
+      <li><a href="#produk">Produk</a></li>
+      <li><a href="#footer">Kontak</a></li>
+    </ul>
+    <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Nav Drawer -->
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#home" onclick="closeMobileNav()">Home</a>
+    <a href="#keunggulan" onclick="closeMobileNav()">Keunggulan</a>
+    <a href="#produk" onclick="closeMobileNav()">Produk</a>
+    <a href="#footer" onclick="closeMobileNav()">Kontak</a>
+  </div>
+
+  <!-- ──────── HERO ──────── -->
+  <section id="home">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-bg-circle"></div>
+
+    <div class="hero-left">
+      <div class="hero-eyebrow">E-Book Digital · Panduan Lengkap</div>
+
+      <h1 class="hero-title">
+        Kuasai<br/>
+        <em>Remote Desktop</em><br/>
+        Protocol
+      </h1>
+
+      <p class="hero-subtitle">
+        Panduan komprehensif memahami, mengkonfigurasi, dan mengamankan
+        RDP untuk kebutuhan kerja jarak jauh Anda. Ditulis oleh praktisi,
+        untuk praktisi.
+      </p>
+
+      <a href="#produk" class="hero-cta">
+        Lihat Produk
+        <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 8h10M9 4l4 4-4 4"/>
+        </svg>
+      </a>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-num">200+</div>
+          <div class="stat-label">Halaman</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">ID</div>
+          <div class="stat-label">Bahasa Indonesia</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">PDF</div>
+          <div class="stat-label">Format Digital</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="book-mockup">
+        <div class="book-badge">E·BOOK<br/>2024<br/>✦</div>
+        <div class="book-cover">
+          <div class="book-tag">// Digital Guide</div>
+          <div>
+            <div class="book-icon">🖥️</div>
+            <div class="book-main-text">Remote<br/>Desktop<br/><span>Protocol</span></div>
+          </div>
+          <div class="book-sub-text">Panduan Lengkap RDP →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────── KEUNGGULAN ──────── -->
+  <section id="keunggulan">
+    <div class="section-header reveal">
+      <span class="section-tag">// 02 — Kenapa Pilih Kami</span>
+      <h2 class="section-title">Dirancang untuk<br/><em>Kemudahan</em> Anda</h2>
+    </div>
+
+    <!-- Slogan Marquee -->
+    <div class="slogan-banner reveal">
+      <div class="slogan-scroll">
+        <span class="slogan-text">Buat pekerjaan semakin mudah dan efisien <span class="slogan-dot">✦</span></span>
+        <span class="slogan-text">Buat pekerjaan semakin mudah dan efisien <span class="slogan-dot">✦</span></span>
+        <span class="slogan-text">Buat pekerjaan semakin mudah dan efisien <span class="slogan-dot">✦</span></span>
+        <span class="slogan-text">Buat pekerjaan semakin mudah dan efisien <span class="slogan-dot">✦</span></span>
+      </div>
+    </div>
+
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-num">01 —</div>
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Harga Terjangkau</div>
+        <div class="feature-desc">Investasi kecil untuk pengetahuan besar. Dapatkan panduan lengkap RDP dengan harga yang sangat bersahabat tanpa mengorbankan kualitas konten.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02 —</div>
+        <div class="feature-icon">🇮🇩</div>
+        <div class="feature-title">Bahasa Indonesia</div>
+        <div class="feature-desc">Seluruh konten ditulis dalam Bahasa Indonesia yang mudah dipahami. Tidak perlu struggle dengan dokumentasi berbahasa asing lagi.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03 —</div>
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Format PDF</div>
+        <div class="feature-desc">Bisa dibaca di mana saja — laptop, tablet, atau smartphone. Download sekali, baca selamanya tanpa perlu koneksi internet.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04 —</div>
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Langsung Praktis</div>
+        <div class="feature-desc">Panduan step-by-step yang bisa langsung Anda terapkan. Dilengkapi screenshot dan contoh konfigurasi nyata dari lapangan.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">05 —</div>
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Keamanan & Troubleshoot</div>
+        <div class="feature-desc">Tidak hanya setup dasar — buku ini juga membahas hardening keamanan RDP dan troubleshooting error yang sering ditemui.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">06 —</div>
+        <div class="feature-icon">♾️</div>
+        <div class="feature-title">Akses Seumur Hidup</div>
+        <div class="feature-desc">Bayar sekali, milik Anda selamanya. Termasuk update konten gratis jika ada revisi atau penambahan materi di masa depan.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────── PRODUK ──────── -->
+  <section id="produk">
+    <div class="section-header reveal">
+      <span class="section-tag">// 03 — Etalase Produk</span>
+      <h2 class="section-title">Satu Produk,<br/><em>Satu Tujuan</em></h2>
+    </div>
+
+    <div class="product-shell reveal">
+      <div class="product-inner">
+
+        <!-- Visual -->
+        <div class="product-visual">
+          <div class="mini-book">
+            <div style="font-family:'Space Mono',monospace;font-size:0.4rem;color:var(--accent);letter-spacing:0.1em;">// E-BOOK</div>
+            <div>
+              <div class="mini-book-icon">🖥️</div>
+              <div class="mini-book-title">
+                Remote<br/>Desktop<br/><span>Protocol</span>
+              </div>
+            </div>
+            <div class="mini-book-sub">Panduan Lengkap RDP</div>
+          </div>
+          <div class="format-pills">
+            <div class="pill active">PDF</div>
+            <div class="pill">Digital</div>
+            <div class="pill">ID Lang</div>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="product-info">
+          <div class="product-name">
+            E-Book <span>Remote Desktop</span><br/>Protocol
+          </div>
+          <div class="product-tagline">Panduan Komprehensif · Edisi 2024</div>
+
+          <ul class="spec-list">
+            <li class="spec-item">
+              <span class="spec-key">Bahasa</span>
+              <span class="spec-val highlight">🇮🇩 Indonesia</span>
+            </li>
+            <li class="spec-item">
+              <span class="spec-key">Format File</span>
+              <span class="spec-val">PDF</span>
+            </li>
+            <li class="spec-item">
+              <span class="spec-key">Jumlah Halaman</span>
+              <span class="spec-val">200+ Halaman</span>
+            </li>
+            <li class="spec-item">
+              <span class="spec-key">Update</span>
+              <span class="spec-val highlight">Gratis Seumur Hidup</span>
+            </li>
+            <li class="spec-item">
+              <span class="spec-key">Level</span>
+              <span class="spec-val">Pemula → Mahir</span>
+            </li>
+          </ul>
+
+          <div class="price-block">
+            <div>
+              <div class="price-main">Rp 49K</div>
+              <div class="price-sub">Harga sudah termasuk semua materi</div>
+            </div>
+            <div class="price-badge">Terbaik</div>
+          </div>
+
+          <button class="buy-btn">
+            Beli Sekarang via WhatsApp
+            <span class="arrow">→</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ──────── FOOTER ──────── -->
+  <footer id="footer">
+    <div class="footer-brand">
+      <div class="logo">E·BOOK / RDP</div>
+      <p>Panduan terlengkap Remote Desktop Protocol dalam Bahasa Indonesia. Dibuat untuk membantu Anda bekerja lebih cerdas dari mana saja.</p>
+    </div>
+
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#keunggulan">Keunggulan</a></li>
+        <li><a href="#produk">Produk</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h4>Hubungi Kami</h4>
+      <ul>
+        <li>
+          <a href="mailto:satriyaajib31@gmail.com">
+            <span class="contact-icon">✉</span>
+            satriyaajib31@gmail.com
+          </a>
+        </li>
+        <li>
+          <a href="https://wa.me/6287704633053" target="_blank">
+            <span class="contact-icon">💬</span>
+            +62 877-0463-3053
+          </a>
+        </li>
+      </ul>
+    </div>
+  </footer>
+
+  <div class="footer-bottom">
+    <p>© 2024 <span>E-Book RDP</span>. All rights reserved.</p>
+    <p>Made by satriya</p>
+  </div>
+  <script src="script.js"> </script>
+</body>
+</html>
