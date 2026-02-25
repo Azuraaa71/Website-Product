@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>E-Book RDP — Remote Desktop Protocol</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script>
+    // Apply saved theme before render to prevent flash
+    (function(){
+      if(localStorage.getItem('ebook-rdp-theme') === 'light')
+        document.documentElement.setAttribute('data-theme','light');
+    })();
+  </script>
+  <style>
+    /* ── HERO ── */
+    #home {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      padding: 8rem 3rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-bg-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(232,80,26,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(232,80,26,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+    .hero-bg-circle {
+      position: absolute;
+      width: 600px; height: 600px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(26,92,232,0.12) 0%, transparent 70%);
+      right: -100px; top: 50%; transform: translateY(-50%);
+    }
+    .hero-left { position: relative; z-index: 2; }
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 0.6rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; color: var(--accent);
+      letter-spacing: 0.15em; text-transform: uppercase;
+      margin-bottom: 1.8rem;
+      border: 1px solid rgba(232,80,26,0.3);
+      padding: 0.4rem 0.9rem; border-radius: 2px;
+    }
+    .hero-eyebrow::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--accent); border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .hero-title {
+      font-weight: 800;
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      line-height: 1.0; letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
+    }
+    .hero-title em {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic; color: var(--accent);
+    }
+    .hero-subtitle {
+      font-size: 1rem; color: var(--muted);
+      line-height: 1.7; max-width: 420px; margin-bottom: 2.5rem;
+    }
+    .hero-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    .hero-right {
+      position: relative; z-index: 2;
+      display: flex; justify-content: center; align-items: center;
+    }
+    .book-mockup {
+      position: relative; width: 260px;
+      animation: float 4s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0) rotate(-3deg); }
+      50%      { transform: translateY(-18px) rotate(-3deg); }
+    }
+    .book-cover {
+      width: 260px; aspect-ratio: 3/4;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      border-radius: 4px 12px 12px 4px;
+      border-left: 16px solid var(--accent);
+      box-shadow: -8px 8px 40px rgba(0,0,0,0.8), inset -2px 0 8px rgba(0,0,0,0.5);
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 1.2rem 1rem; position: relative; overflow: hidden;
+    }
+    .book-cover::before {
+      content: ''; position: absolute; inset: 0;
+      background: repeating-linear-gradient(45deg,rgba(255,255,255,0.015) 0px,rgba(255,255,255,0.015) 1px,transparent 1px,transparent 8px);
+    }
+    .book-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.55rem; letter-spacing: 0.12em;
+      color: var(--accent); text-transform: uppercase;
+      border: 1px solid rgba(232,80,26,0.5);
+      padding: 0.2rem 0.5rem; align-self: flex-start;
+    }
+    .book-main-text {
+      font-weight: 800; font-size: 1.05rem; line-height: 1.15;
+      color: #fff; text-transform: uppercase;
+      letter-spacing: -0.01em; word-break: break-word;
+    }
+    .book-main-text span { color: var(--accent); display: block; }
+    .book-sub-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; color: rgba(255,255,255,0.4);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .book-icon { font-size: 2.2rem; line-height: 1; margin: 0.4rem 0; }
+    .book-badge {
+      position: absolute; top: -20px; right: -20px;
+      width: 80px; height: 80px;
+      background: var(--accent); border-radius: 50%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; font-weight: 700;
+      text-align: center; line-height: 1.2; color: white;
+      box-shadow: 0 8px 24px rgba(232,80,26,0.4);
+      animation: spin-slow 12s linear infinite;
+    }
+    @keyframes spin-slow { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+    .hero-stats {
+      display: flex; gap: 2rem;
+      margin-top: 2.5rem; padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    .stat-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 1.5rem; font-weight: 700; color: var(--white);
+    }
+    .stat-label {
+      font-size: 0.72rem; color: var(--muted);
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+
+    /* Quick nav cards */
+    .quick-nav {
+      padding: 4rem 3rem;
+      background: #0d0d0d;
+      border-top: 1px solid var(--border);
+    }
+    .quick-nav-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+    .quick-card {
+      background: var(--black);
+      padding: 2rem;
+      text-decoration: none;
+      color: var(--white);
+      display: flex; flex-direction: column; gap: 1rem;
+      transition: background 0.25s;
+      position: relative; overflow: hidden;
+    }
+    .quick-card::after {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .quick-card:hover { background: #111; }
+    .quick-card:hover::after { transform: scaleX(1); }
+    .quick-card-icon { font-size: 1.6rem; }
+    .quick-card-title {
+      font-weight: 700; font-size: 0.95rem;
+      letter-spacing: -0.01em;
+    }
+    .quick-card-desc {
+      font-size: 0.8rem; color: var(--muted); line-height: 1.5;
+    }
+    .quick-card-arrow {
+      font-size: 1.1rem; color: var(--accent);
+      margin-top: auto; align-self: flex-start;
+    }
+
+    @media (max-width: 900px) {
+      #home { grid-template-columns: 1fr; text-align: center; padding: 7rem 1.5rem 3rem; }
+      .hero-right { margin-top: 3rem; }
+      .hero-subtitle { max-width: 100%; }
+      .hero-stats { justify-content: center; }
+      .hero-btns { justify-content: center; }
+      .quick-nav { padding: 3rem 1.5rem; }
+      .quick-nav-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 500px) {
+      .quick-nav-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">E·BOOK / RDP</a>
+    <ul class="nav-links">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="keunggulan.html">Keunggulan</a></li>
+      <li><a href="produk.html">Produk</a></li>
+      <li><a href="about.html">Tentang</a></li>
+      <li><a href="cara-beli.html">Cara Beli</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <!-- Moon icon (dark mode active) -->
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        <!-- Sun icon (light mode active) -->
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html" class="active">Home</a>
+    <a href="keunggulan.html">Keunggulan</a>
+    <a href="produk.html">Produk</a>
+    <a href="about.html">Tentang</a>
+    <a href="cara-beli.html">Cara Beli</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+
+  <!-- HERO -->
+  <section id="home">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-bg-circle"></div>
+    <div class="hero-left reveal">
+      <div class="hero-eyebrow">E-Book Digital · Panduan Lengkap</div>
+      <h1 class="hero-title">
+        Kuasai<br/>
+        <em>Remote Desktop</em><br/>
+        Protocol
+      </h1>
+      <p class="hero-subtitle">
+        Panduan komprehensif memahami, mengkonfigurasi, dan mengamankan RDP untuk kebutuhan kerja jarak jauh Anda. Ditulis oleh praktisi, untuk praktisi.
+      </p>
+      <div class="hero-btns">
+        <a href="produk.html" class="btn-primary">
+          Lihat Produk
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+        </a>
+        <a href="cara-beli.html" class="btn-outline">Cara Beli</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><div class="stat-num">200+</div><div class="stat-label">Halaman</div></div>
+        <div class="stat"><div class="stat-num">ID</div><div class="stat-label">Bahasa Indonesia</div></div>
+        <div class="stat"><div class="stat-num">PDF</div><div class="stat-label">Format Digital</div></div>
+      </div>
+    </div>
+    <div class="hero-right reveal" data-delay="150">
+      <div class="book-mockup">
+        <div class="book-badge">E·BOOK<br/>2024<br/>✦</div>
+        <div class="book-cover">
+          <div class="book-tag">// Digital Guide</div>
+          <div>
+            <div class="book-icon">🖥️</div>
+            <div class="book-main-text">Remote<br/>Desktop<br/><span>Protocol</span></div>
+          </div>
+          <div class="book-sub-text">Panduan Lengkap RDP →</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUICK NAV CARDS -->
+  <section class="quick-nav">
+    <div class="quick-nav-grid reveal">
+      <a href="keunggulan.html" class="quick-card">
+        <div class="quick-card-icon">⭐</div>
+        <div class="quick-card-title">Keunggulan</div>
+        <div class="quick-card-desc">Kenapa E-Book ini berbeda dari panduan lainnya</div>
+        <div class="quick-card-arrow">→</div>
+      </a>
+      <a href="produk.html" class="quick-card">
+        <div class="quick-card-icon">📖</div>
+        <div class="quick-card-title">Produk</div>
+        <div class="quick-card-desc">Detail spesifikasi, isi materi, dan harga</div>
+        <div class="quick-card-arrow">→</div>
+      </a>
+      <a href="cara-beli.html" class="quick-card">
+        <div class="quick-card-icon">🛒</div>
+        <div class="quick-card-title">Cara Beli</div>
+        <div class="quick-card-desc">Langkah mudah pembelian via WhatsApp</div>
+        <div class="quick-card-arrow">→</div>
+      </a>
+      <a href="faq.html" class="quick-card">
+        <div class="quick-card-icon">❓</div>
+        <div class="quick-card-title">FAQ</div>
+        <div class="quick-card-desc">Pertanyaan yang sering ditanyakan pembeli</div>
+        <div class="quick-card-arrow">→</div>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <div class="logo">E·BOOK / RDP</div>
+      <p>Panduan terlengkap Remote Desktop Protocol dalam Bahasa Indonesia. Dibuat untuk membantu Anda bekerja lebih cerdas dari mana saja.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="keunggulan.html">Keunggulan</a></li>
+        <li><a href="produk.html">Produk</a></li>
+        <li><a href="about.html">Tentang Saya</a></li>
+        <li><a href="cara-beli.html">Cara Beli</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Hubungi Kami</h4>
+      <ul>
+        <li><a href="mailto:satriyaajib31@gmail.com"><span class="contact-icon">✉</span>satriyaajib31@gmail.com</a></li>
+        <li><a href="https://wa.me/6287704633053" target="_blank"><span class="contact-icon">💬</span>+62 877-0463-3053</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2024 <span>E-Book RDP</span>. All rights reserved.</p>
+    <p>Made with <span>♥</span> in Indonesia</p>
+  </div>
+
+  <!-- WhatsApp Float -->
+
+  <script src="shared.js"></script>
+</body>
+</html>

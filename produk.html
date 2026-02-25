@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Produk — E-Book RDP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script>
+    // Apply saved theme before render to prevent flash
+    (function(){
+      if(localStorage.getItem('ebook-rdp-theme') === 'light')
+        document.documentElement.setAttribute('data-theme','light');
+    })();
+  </script>
+  <style>
+    .produk-section { padding: 5rem 3rem; background: #0d0d0d; }
+
+    .product-shell {
+      max-width: 860px; margin: 0 auto;
+      border: 1px solid var(--border); position: relative;
+    }
+    .product-shell::before {
+      content: 'PRODUK UNGGULAN';
+      position: absolute; top: -0.55rem; left: 2.5rem;
+      background: #0d0d0d; padding: 0 0.8rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; color: var(--accent); letter-spacing: 0.15em;
+    }
+    .product-inner { display: grid; grid-template-columns: 1fr 1.4fr; }
+    .product-visual {
+      padding: 3rem 2.5rem;
+      border-right: 1px solid var(--border);
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+    }
+    .mini-book {
+      width: 140px; aspect-ratio: 3/4;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      border-left: 10px solid var(--accent);
+      border-radius: 2px 8px 8px 2px;
+      box-shadow: -4px 6px 24px rgba(0,0,0,0.6);
+      display: flex; flex-direction: column; justify-content: space-between;
+      padding: 0.8rem; overflow: hidden;
+    }
+    .mini-book-title {
+      font-weight: 800; font-size: 0.56rem; color: white;
+      line-height: 1.25; text-transform: uppercase;
+      letter-spacing: 0.01em; word-break: break-word;
+    }
+    .mini-book-title span { color: var(--accent); display: block; }
+    .mini-book-icon { font-size: 1.3rem; }
+    .mini-book-sub {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.45rem; color: rgba(255,255,255,0.3);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .format-pills { display: flex; gap: 0.5rem; }
+    .pill {
+      font-family: 'Space Mono', monospace; font-size: 0.6rem;
+      padding: 0.3rem 0.7rem; border: 1px solid var(--border);
+      color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .pill.active { border-color: var(--accent); color: var(--accent); }
+
+    .product-info { padding: 3rem; }
+    .product-name {
+      font-weight: 800; font-size: 1.6rem;
+      letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 0.5rem;
+    }
+    .product-name span { font-family:'Instrument Serif',serif; font-style:italic; color:var(--accent); }
+    .product-tagline {
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem;
+    }
+    .spec-list { list-style: none; margin-bottom: 2rem; }
+    .spec-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.8rem 0; border-bottom: 1px solid var(--border); font-size: 0.85rem;
+    }
+    .spec-key { color: var(--muted); }
+    .spec-val { font-family:'Space Mono',monospace; font-size: 0.8rem; color: var(--white); }
+    .spec-val.highlight { color: var(--accent); }
+
+    .price-block {
+      background: rgba(232,80,26,0.08); border: 1px solid rgba(232,80,26,0.2);
+      padding: 1.2rem 1.5rem; margin-bottom: 1.5rem;
+      display: flex; align-items: flex-end; gap: 0.8rem;
+    }
+    .price-main { font-family:'Space Mono',monospace; font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; }
+    .price-sub { font-size: 0.75rem; color: var(--muted); padding-bottom: 0.2rem; }
+    .price-badge {
+      margin-left: auto; background: var(--accent); color: white;
+      font-family:'Space Mono',monospace; font-size: 0.6rem;
+      padding: 0.25rem 0.6rem; letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .buy-btn {
+      display: flex; align-items: center; justify-content: space-between;
+      width: 100%; background: var(--white); color: var(--black);
+      padding: 1rem 1.5rem; font-family:'Syne',sans-serif; font-weight: 700;
+      font-size: 0.85rem; letter-spacing: 0.04em; text-transform: uppercase;
+      border: none; cursor: pointer; text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+    .buy-btn:hover { background: var(--cream); transform: translateY(-1px); }
+    .buy-btn .arrow { font-size: 1.2rem; }
+
+    /* Materi section */
+    .materi-section { padding: 5rem 3rem; }
+    .materi-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+      background: var(--border); border: 1px solid var(--border); margin-top: 3rem;
+    }
+    .materi-item {
+      background: var(--black); padding: 1.8rem 2rem;
+      display: flex; gap: 1.2rem; align-items: flex-start;
+      transition: background 0.2s;
+    }
+    .materi-item:hover { background: #111; }
+    .materi-num {
+      font-family:'Space Mono',monospace; font-size: 0.65rem;
+      color: var(--accent); min-width: 36px; padding-top: 2px;
+    }
+    .materi-text h4 { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.3rem; }
+    .materi-text p { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+    @media (max-width: 900px) {
+      .produk-section, .materi-section { padding: 4rem 1.5rem; }
+      .product-inner { grid-template-columns: 1fr; }
+      .product-visual { border-right: none; border-bottom: 1px solid var(--border); }
+      .materi-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">E·BOOK / RDP</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="keunggulan.html">Keunggulan</a></li>
+      <li><a href="produk.html" class="active">Produk</a></li>
+      <li><a href="about.html">Tentang</a></li>
+      <li><a href="cara-beli.html">Cara Beli</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Home</a>
+    <a href="keunggulan.html">Keunggulan</a>
+    <a href="produk.html" class="active">Produk</a>
+    <a href="about.html">Tentang</a>
+    <a href="cara-beli.html">Cara Beli</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div style="position:relative;z-index:2" class="reveal">
+      <span class="page-tag">// 03 — Etalase Produk</span>
+      <h1 class="page-title">Satu Produk,<br/><em>Satu Tujuan</em></h1>
+      <p class="page-desc">Fokus pada satu hal dan melakukannya dengan sempurna — panduan RDP terlengkap dalam Bahasa Indonesia.</p>
+    </div>
+  </div>
+
+  <!-- PRODUCT CARD -->
+  <section class="produk-section">
+    <div class="product-shell reveal">
+      <div class="product-inner">
+        <div class="product-visual">
+          <div class="mini-book">
+            <div style="font-family:'Space Mono',monospace;font-size:0.4rem;color:var(--accent);letter-spacing:0.1em;">// E-BOOK</div>
+            <div>
+              <div class="mini-book-icon">🖥️</div>
+              <div class="mini-book-title">Remote<br/>Desktop<br/><span>Protocol</span></div>
+            </div>
+            <div class="mini-book-sub">Panduan Lengkap RDP</div>
+          </div>
+          <div class="format-pills">
+            <div class="pill active">PDF</div>
+            <div class="pill">Digital</div>
+            <div class="pill">ID Lang</div>
+          </div>
+        </div>
+        <div class="product-info">
+          <div class="product-name">E-Book <span>Remote Desktop</span><br/>Protocol</div>
+          <div class="product-tagline">Panduan Komprehensif · Edisi 2024</div>
+          <ul class="spec-list">
+            <li class="spec-item"><span class="spec-key">Bahasa</span><span class="spec-val highlight">🇮🇩 Indonesia</span></li>
+            <li class="spec-item"><span class="spec-key">Format File</span><span class="spec-val">PDF</span></li>
+            <li class="spec-item"><span class="spec-key">Jumlah Halaman</span><span class="spec-val">200+ Halaman</span></li>
+            <li class="spec-item"><span class="spec-key">Update</span><span class="spec-val highlight">Gratis Seumur Hidup</span></li>
+            <li class="spec-item"><span class="spec-key">Level</span><span class="spec-val">Pemula → Mahir</span></li>
+          </ul>
+          <div class="price-block">
+            <div>
+              <div class="price-main">Rp 49K</div>
+              <div class="price-sub">Harga sudah termasuk semua materi</div>
+            </div>
+            <div class="price-badge">Terbaik</div>
+          </div>
+          <a href="https://wa.me/6287704633053?text=Halo, saya ingin membeli E-Book RDP" target="_blank" class="buy-btn">
+            Beli Sekarang via WhatsApp <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ISI MATERI -->
+  <section class="materi-section">
+    <div class="reveal">
+      <span class="section-tag">// Isi Materi</span>
+      <h2 class="section-title">Yang Akan Anda<br/><em>Pelajari</em></h2>
+    </div>
+    <div class="materi-grid reveal">
+      <div class="materi-item"><div class="materi-num">BAB 01</div><div class="materi-text"><h4>Pengenalan RDP</h4><p>Apa itu Remote Desktop Protocol, cara kerjanya, dan mengapa penting untuk dipahami.</p></div></div>
+      <div class="materi-item"><div class="materi-num">BAB 02</div><div class="materi-text"><h4>Instalasi & Konfigurasi</h4><p>Panduan lengkap mengaktifkan dan mengkonfigurasi RDP di Windows step-by-step.</p></div></div>
+      <div class="materi-item"><div class="materi-num">BAB 03</div><div class="materi-text"><h4>Koneksi Remote</h4><p>Cara terhubung ke komputer dari jarak jauh menggunakan berbagai perangkat dan OS.</p></div></div>
+      <div class="materi-item"><div class="materi-num">BAB 04</div><div class="materi-text"><h4>Keamanan RDP</h4><p>Hardening dan best practices agar koneksi RDP Anda aman dari ancaman luar.</p></div></div>
+      <div class="materi-item"><div class="materi-num">BAB 05</div><div class="materi-text"><h4>Troubleshooting</h4><p>Solusi untuk error dan masalah umum yang sering ditemui saat menggunakan RDP.</p></div></div>
+      <div class="materi-item"><div class="materi-num">BAB 06</div><div class="materi-text"><h4>Tips & Optimasi</h4><p>Cara mengoptimalkan performa RDP agar koneksi lebih cepat dan stabil.</p></div></div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-brand">
+      <div class="logo">E·BOOK / RDP</div>
+      <p>Panduan terlengkap Remote Desktop Protocol dalam Bahasa Indonesia.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="keunggulan.html">Keunggulan</a></li>
+        <li><a href="produk.html">Produk</a></li>
+        <li><a href="about.html">Tentang Saya</a></li>
+        <li><a href="cara-beli.html">Cara Beli</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Hubungi Kami</h4>
+      <ul>
+        <li><a href="mailto:satriyaajib31@gmail.com"><span class="contact-icon">✉</span>satriyaajib31@gmail.com</a></li>
+        <li><a href="https://wa.me/6287704633053" target="_blank"><span class="contact-icon">💬</span>+62 877-0463-3053</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2024 <span>E-Book RDP</span>. All rights reserved.</p>
+    <p>Made with <span>♥</span> in Indonesia</p>
+  </div>
+  <script src="shared.js"></script>
+</body>
+</html>

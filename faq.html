@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>FAQ — E-Book RDP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script>
+    // Apply saved theme before render to prevent flash
+    (function(){
+      if(localStorage.getItem('ebook-rdp-theme') === 'light')
+        document.documentElement.setAttribute('data-theme','light');
+    })();
+  </script>
+  <style>
+    .faq-section { padding: 5rem 3rem; max-width: 820px; margin: 0 auto; }
+
+    .faq-category-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      letter-spacing: 0.18em; text-transform: uppercase;
+      margin-bottom: 1.5rem; margin-top: 3.5rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; gap: 0.8rem;
+    }
+    .faq-category-label::before {
+      content: ''; width: 6px; height: 6px;
+      background: var(--accent); border-radius: 50%;
+    }
+
+    /* Accordion */
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%; background: none; border: none; text-align: left;
+      padding: 1.4rem 0; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 1rem; color: var(--white);
+    }
+    .faq-question:hover .faq-q-text { color: var(--accent); }
+    .faq-q-text {
+      font-size: 0.95rem; font-weight: 700; line-height: 1.4;
+      font-family: 'Syne', sans-serif; transition: color 0.2s;
+    }
+    .faq-icon {
+      width: 24px; height: 24px; border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; color: var(--accent); flex-shrink: 0;
+      transition: transform 0.3s, background 0.2s;
+    }
+    .faq-item.open .faq-icon { transform: rotate(45deg); background: var(--accent); color: white; border-color: var(--accent); }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+      padding: 0;
+    }
+    .faq-item.open .faq-answer { max-height: 400px; padding-bottom: 1.4rem; }
+    .faq-answer p {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.75;
+    }
+    .faq-answer a { color: var(--accent); text-decoration: none; }
+    .faq-answer a:hover { text-decoration: underline; }
+
+    /* Still have questions */
+    .still-questions {
+      border: 1px solid var(--border); padding: 3rem;
+      text-align: center; margin-top: 4rem;
+    }
+    .still-questions h3 { font-size: 1.3rem; font-weight: 800; margin-bottom: 0.8rem; }
+    .still-questions h3 em { font-family:'Instrument Serif',serif; font-style:italic; color:var(--accent); }
+    .still-questions p { font-size: 0.88rem; color: var(--muted); margin-bottom: 2rem; line-height: 1.7; }
+    .contact-btns { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    @media (max-width: 900px) {
+      .faq-section { padding: 4rem 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">E·BOOK / RDP</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="keunggulan.html">Keunggulan</a></li>
+      <li><a href="produk.html">Produk</a></li>
+      <li><a href="about.html">Tentang</a></li>
+      <li><a href="cara-beli.html">Cara Beli</a></li>
+      <li><a href="faq.html" class="active">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Home</a>
+    <a href="keunggulan.html">Keunggulan</a>
+    <a href="produk.html">Produk</a>
+    <a href="about.html">Tentang</a>
+    <a href="cara-beli.html">Cara Beli</a>
+    <a href="faq.html" class="active">FAQ</a>
+  </div>
+
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div style="position:relative;z-index:2" class="reveal">
+      <span class="page-tag">// FAQ</span>
+      <h1 class="page-title">Pertanyaan yang<br/><em>Sering Ditanyakan</em></h1>
+      <p class="page-desc">Temukan jawaban untuk pertanyaan umum seputar produk, pembelian, dan isi materi E-Book RDP.</p>
+    </div>
+  </div>
+
+  <section class="faq-section reveal">
+
+    <!-- Kategori: Produk -->
+    <div class="faq-category-label">Tentang Produk</div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Apa itu E-Book Remote Desktop Protocol ini?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Ini adalah panduan digital dalam format PDF yang membahas Remote Desktop Protocol (RDP) secara lengkap — mulai dari pengenalan dasar, cara konfigurasi, koneksi remote, keamanan, hingga troubleshooting. Ditulis dalam Bahasa Indonesia agar mudah dipahami oleh siapa pun.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Berapa halaman isi E-Book ini?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>E-Book ini terdiri dari 200+ halaman yang mencakup 6 bab utama beserta lampiran dan referensi tambahan. Setiap bab disusun secara sistematis agar mudah diikuti dari awal hingga akhir.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Apakah cocok untuk pemula?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Ya, sangat cocok! E-Book ini dirancang untuk semua level, dari pemula yang baru pertama kali mendengar istilah RDP, hingga pengguna berpengalaman yang ingin memperdalam pengetahuan tentang keamanan dan optimasi.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Format file apa yang akan saya terima?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Anda akan menerima file dalam format <strong>PDF</strong> yang bisa dibuka di semua perangkat — laptop, PC, tablet, maupun smartphone (Android dan iOS). Tidak perlu software khusus selain PDF reader yang sudah tersedia secara gratis.</p>
+      </div>
+    </div>
+
+    <!-- Kategori: Pembelian -->
+    <div class="faq-category-label">Pembelian & Pembayaran</div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Berapa harga E-Book ini?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Harga E-Book ini adalah <strong>Rp 49.000</strong> — sekali bayar, milik Anda selamanya termasuk update gratis di masa depan.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Metode pembayaran apa yang tersedia?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Kami menerima pembayaran via Transfer Bank (BCA, BRI, BNI, Mandiri), E-Wallet (GoPay, OVO, DANA, ShopeePay), dan QRIS. Detail rekening/nomor akan diberikan saat konfirmasi pesanan via WhatsApp.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Berapa lama setelah pembayaran E-Book dikirim?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Pada jam aktif (08.00–22.00 WIB), E-Book akan dikirimkan dalam <strong>5–15 menit</strong> setelah bukti pembayaran diterima dan dikonfirmasi. Di luar jam tersebut, pengiriman dilakukan keesokan paginya.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Melalui apa E-Book dikirimkan?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>File PDF akan dikirim langsung via <strong>WhatsApp</strong> atau <strong>Email</strong> sesuai pilihan Anda. Pastikan WhatsApp/email yang Anda berikan saat pemesanan aktif dan bisa menerima file.</p>
+      </div>
+    </div>
+
+    <!-- Kategori: Akses & Teknis -->
+    <div class="faq-category-label">Akses & Teknis</div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Apakah ada masa berlaku setelah pembelian?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Tidak ada masa berlaku. Setelah Anda membeli dan menerima file, E-Book tersebut menjadi milik Anda selamanya. Simpan di perangkat Anda dan baca kapan saja tanpa batas.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Bagaimana jika ada update materi di kemudian hari?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>Update konten bersifat <strong>gratis</strong> untuk pembeli. Jika ada versi baru atau penambahan materi, kami akan menghubungi Anda via WhatsApp atau email yang terdaftar untuk mengirimkan versi terbaru.</p>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <button class="faq-question">
+        <span class="faq-q-text">Apakah saya bisa membagikan file ini ke orang lain?</span>
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-answer">
+        <p>E-Book ini hanya untuk penggunaan pribadi. Mendistribusikan atau menjual kembali file ini tanpa izin adalah pelanggaran hak cipta. Jika teman Anda tertarik, silakan arahkan mereka untuk membeli secara langsung — harganya sangat terjangkau! 😊</p>
+      </div>
+    </div>
+
+    <!-- Still have questions -->
+    <div class="still-questions">
+      <h3>Masih Ada<br/><em>Pertanyaan?</em></h3>
+      <p>Jangan ragu untuk menghubungi kami langsung. Kami siap membantu menjawab semua pertanyaan Anda.</p>
+      <div class="contact-btns">
+        <a href="https://wa.me/6287704633053" target="_blank" class="btn-primary">Chat WhatsApp →</a>
+        <a href="mailto:satriyaajib31@gmail.com" class="btn-outline">Kirim Email</a>
+      </div>
+    </div>
+
+  </section>
+
+  <footer>
+    <div class="footer-brand">
+      <div class="logo">E·BOOK / RDP</div>
+      <p>Panduan terlengkap Remote Desktop Protocol dalam Bahasa Indonesia.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="keunggulan.html">Keunggulan</a></li>
+        <li><a href="produk.html">Produk</a></li>
+        <li><a href="about.html">Tentang Saya</a></li>
+        <li><a href="cara-beli.html">Cara Beli</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Hubungi Kami</h4>
+      <ul>
+        <li><a href="mailto:satriyaajib31@gmail.com"><span class="contact-icon">✉</span>satriyaajib31@gmail.com</a></li>
+        <li><a href="https://wa.me/6287704633053" target="_blank"><span class="contact-icon">💬</span>+62 877-0463-3053</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2024 <span>E-Book RDP</span>. All rights reserved.</p>
+    <p>Made with <span>♥</span> in Indonesia</p>
+  </div>
+
+  <script src="shared.js"></script>
+  <script>
+    // FAQ Accordion
+    document.querySelectorAll('.faq-question').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const item = btn.parentElement;
+        const isOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        // Open clicked if was closed
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>

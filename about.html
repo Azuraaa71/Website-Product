@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tentang Saya — E-Book RDP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script>
+    // Apply saved theme before render to prevent flash
+    (function(){
+      if(localStorage.getItem('ebook-rdp-theme') === 'light')
+        document.documentElement.setAttribute('data-theme','light');
+    })();
+  </script>
+  <style>
+    .about-section { padding: 5rem 3rem; }
+    .about-grid {
+      display: grid; grid-template-columns: 1fr 1.6fr;
+      gap: 6rem; align-items: start; margin-top: 4rem;
+    }
+
+    /* Avatar card */
+    .avatar-card {
+      border: 1px solid var(--border); padding: 2.5rem;
+      display: flex; flex-direction: column; align-items: center;
+      text-align: center; gap: 1.2rem; position: sticky; top: 100px;
+    }
+    .avatar-circle {
+      width: 120px; height: 120px; border-radius: 50%;
+      background: linear-gradient(135deg, #1a1a2e, #0f3460);
+      border: 3px solid var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem;
+    }
+    .avatar-name { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.01em; }
+    .avatar-role {
+      font-family: 'Space Mono', monospace; font-size: 0.65rem;
+      color: var(--accent); letter-spacing: 0.12em; text-transform: uppercase;
+    }
+    .avatar-divider { width: 40px; height: 1px; background: var(--accent); }
+    .avatar-bio { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+    .avatar-links { display: flex; flex-direction: column; gap: 0.6rem; width: 100%; }
+    .avatar-link {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding: 0.7rem 1rem;
+      border: 1px solid var(--border);
+      text-decoration: none; color: var(--muted);
+      font-size: 0.82rem; transition: border-color 0.2s, color 0.2s;
+    }
+    .avatar-link:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* Content */
+    .about-content h2 {
+      font-weight: 800; font-size: clamp(1.8rem, 3vw, 2.4rem);
+      letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 1.5rem;
+    }
+    .about-content h2 em { font-family:'Instrument Serif',serif; font-style:italic; color:var(--accent); }
+    .about-content p {
+      font-size: 0.95rem; color: var(--muted); line-height: 1.85; margin-bottom: 1.5rem;
+    }
+
+    .skills-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+      background: var(--border); border: 1px solid var(--border);
+      margin: 2.5rem 0;
+    }
+    .skill-item {
+      background: var(--black); padding: 1.2rem 1.5rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .skill-dot { width: 6px; height: 6px; background: var(--accent); border-radius: 50%; flex-shrink: 0; }
+    .skill-label { font-size: 0.85rem; font-weight: 600; }
+
+    .mission-box {
+      border: 1px solid rgba(232,80,26,0.3);
+      background: rgba(232,80,26,0.05);
+      padding: 2rem; margin-top: 2rem;
+      position: relative;
+    }
+    .mission-box::before {
+      content: '"'; position: absolute;
+      top: -0.5rem; left: 1.5rem;
+      font-family: 'Instrument Serif', serif;
+      font-size: 4rem; color: var(--accent); line-height: 1;
+    }
+    .mission-box p {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic; font-size: 1.1rem;
+      color: var(--white); line-height: 1.7; margin-bottom: 0.8rem;
+    }
+    .mission-box cite {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase; font-style: normal;
+    }
+
+    @media (max-width: 900px) {
+      .about-section { padding: 4rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .avatar-card { position: static; }
+      .skills-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">E·BOOK / RDP</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="keunggulan.html">Keunggulan</a></li>
+      <li><a href="produk.html">Produk</a></li>
+      <li><a href="about.html" class="active">Tentang</a></li>
+      <li><a href="cara-beli.html">Cara Beli</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Home</a>
+    <a href="keunggulan.html">Keunggulan</a>
+    <a href="produk.html">Produk</a>
+    <a href="about.html" class="active">Tentang</a>
+    <a href="cara-beli.html">Cara Beli</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div style="position:relative;z-index:2" class="reveal">
+      <span class="page-tag">// Tentang Saya</span>
+      <h1 class="page-title">Siapa di Balik<br/><em>E-Book Ini?</em></h1>
+      <p class="page-desc">Kenali penulis yang menyusun panduan RDP ini dari pengalaman nyata di lapangan.</p>
+    </div>
+  </div>
+
+  <section class="about-section">
+    <div class="about-grid">
+
+      <!-- Sidebar -->
+      <div class="avatar-card reveal">
+        <div class="avatar-circle">👨‍💻</div>
+        <div class="avatar-name">Satriya Aji</div>
+        <div class="avatar-role">Penulis & Praktisi IT</div>
+        <div class="avatar-divider"></div>
+        <p class="avatar-bio">Praktisi teknologi dengan fokus pada remote access, networking, dan keamanan sistem Windows.</p>
+        <div class="avatar-links">
+          <a href="mailto:satriyaajib31@gmail.com" class="avatar-link">✉ satriyaajib31@gmail.com</a>
+          <a href="https://wa.me/6287704633053" target="_blank" class="avatar-link">💬 +62 877-0463-3053</a>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div class="about-content reveal" data-delay="100">
+        <h2>Belajar dari<br/><em>Pengalaman Nyata</em></h2>
+        <p>Halo! Saya Satriya Aji, seorang praktisi IT yang sudah berkecimpung di dunia remote desktop dan sistem jaringan selama beberapa tahun. Pengalaman ini dimulai dari kebutuhan pribadi untuk mengelola komputer dari jarak jauh, yang kemudian berkembang menjadi keahlian yang saya gunakan sehari-hari.</p>
+        <p>Selama belajar RDP, saya menyadari betapa sulitnya menemukan panduan yang ditulis dalam Bahasa Indonesia secara lengkap dan mudah dipahami. Sebagian besar sumber hanya tersedia dalam Bahasa Inggris dengan penjelasan yang terlalu teknis untuk pemula.</p>
+        <p>Dari situlah ide E-Book ini lahir — saya ingin menyajikan panduan RDP yang komprehensif, praktis, dan bisa dipahami oleh siapa saja, mulai dari pemula hingga yang sudah berpengalaman.</p>
+
+        <div class="skills-grid">
+          <div class="skill-item"><div class="skill-dot"></div><div class="skill-label">Remote Desktop Protocol</div></div>
+          <div class="skill-item"><div class="skill-dot"></div><div class="skill-label">Windows Server Administration</div></div>
+          <div class="skill-item"><div class="skill-dot"></div><div class="skill-label">Network Security</div></div>
+          <div class="skill-item"><div class="skill-dot"></div><div class="skill-label">System Troubleshooting</div></div>
+          <div class="skill-item"><div class="skill-dot"></div><div class="skill-label">Firewall & VPN Setup</div></div>
+          <div class="skill-item"><div class="skill-dot"></div><div class="skill-label">Technical Writing</div></div>
+        </div>
+
+        <div class="mission-box">
+          <p>Saya percaya bahwa pengetahuan teknologi seharusnya bisa diakses oleh semua orang, tanpa hambatan bahasa atau harga yang mahal.</p>
+          <cite>— Satriya Aji, Penulis E-Book RDP</cite>
+        </div>
+
+        <div style="display:flex;gap:1rem;margin-top:2rem;flex-wrap:wrap;">
+          <a href="produk.html" class="btn-primary">Lihat Produk →</a>
+          <a href="https://wa.me/6287704633053" target="_blank" class="btn-outline">Hubungi Saya</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-brand">
+      <div class="logo">E·BOOK / RDP</div>
+      <p>Panduan terlengkap Remote Desktop Protocol dalam Bahasa Indonesia.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="keunggulan.html">Keunggulan</a></li>
+        <li><a href="produk.html">Produk</a></li>
+        <li><a href="about.html">Tentang Saya</a></li>
+        <li><a href="cara-beli.html">Cara Beli</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Hubungi Kami</h4>
+      <ul>
+        <li><a href="mailto:satriyaajib31@gmail.com"><span class="contact-icon">✉</span>satriyaajib31@gmail.com</a></li>
+        <li><a href="https://wa.me/6287704633053" target="_blank"><span class="contact-icon">💬</span>+62 877-0463-3053</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2024 <span>E-Book RDP</span>. All rights reserved.</p>
+    <p>Made with <span>♥</span> in Indonesia</p>
+  </div>
+  <script src="shared.js"></script>
+</body>
+</html>

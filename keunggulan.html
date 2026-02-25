@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Keunggulan — E-Book RDP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script>
+    // Apply saved theme before render to prevent flash
+    (function(){
+      if(localStorage.getItem('ebook-rdp-theme') === 'light')
+        document.documentElement.setAttribute('data-theme','light');
+    })();
+  </script>
+  <style>
+    /* Slogan banner */
+    .slogan-banner {
+      background: var(--accent); padding: 1.8rem 3rem;
+      overflow: hidden; position: relative;
+    }
+    .slogan-scroll {
+      display: flex; gap: 4rem;
+      animation: marquee 18s linear infinite;
+      white-space: nowrap;
+    }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    .slogan-text {
+      font-family: 'Instrument Serif', serif;
+      font-style: italic; font-size: 1.3rem;
+      color: white; display: inline-flex; align-items: center; gap: 1.5rem;
+    }
+    .slogan-dot { color: rgba(255,255,255,0.5); font-style: normal; }
+    @media (max-width: 600px) {
+      .slogan-scroll { gap: 2rem; animation-duration: 9s; }
+      .slogan-text { font-size: 0.85rem; gap: 1rem; }
+    }
+
+    /* Features grid */
+    .features-section { padding: 5rem 3rem; }
+    .features-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 1px; background: var(--border);
+      border: 1px solid var(--border);
+      margin-top: 4rem;
+    }
+    .feature-card {
+      background: var(--black); padding: 2.5rem;
+      position: relative; overflow: hidden; transition: background 0.3s;
+    }
+    .feature-card::before {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: var(--accent);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.3s;
+    }
+    .feature-card:hover { background: #111; }
+    .feature-card:hover::before { transform: scaleX(1); }
+    .feature-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      letter-spacing: 0.1em; margin-bottom: 1.5rem;
+    }
+    .feature-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .feature-title { font-weight: 700; font-size: 1.1rem; margin-bottom: 0.7rem; letter-spacing: -0.01em; }
+    .feature-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.65; }
+
+    /* CTA strip */
+    .cta-strip {
+      background: #0d0d0d; border-top: 1px solid var(--border);
+      padding: 5rem 3rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 2rem;
+      flex-wrap: wrap;
+    }
+    .cta-strip h2 { font-size: clamp(1.5rem,3vw,2.2rem); font-weight: 800; letter-spacing: -0.02em; }
+    .cta-strip h2 em { font-family:'Instrument Serif',serif; font-style:italic; color:var(--accent); }
+    .cta-btns { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+    @media (max-width: 900px) {
+      .features-section { padding: 4rem 1.5rem; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .cta-strip { padding: 4rem 1.5rem; flex-direction: column; text-align: center; }
+      .cta-btns { justify-content: center; }
+    }
+    @media (max-width: 600px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">E·BOOK / RDP</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="keunggulan.html" class="active">Keunggulan</a></li>
+      <li><a href="produk.html">Produk</a></li>
+      <li><a href="about.html">Tentang</a></li>
+      <li><a href="cara-beli.html">Cara Beli</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Home</a>
+    <a href="keunggulan.html" class="active">Keunggulan</a>
+    <a href="produk.html">Produk</a>
+    <a href="about.html">Tentang</a>
+    <a href="cara-beli.html">Cara Beli</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div style="position:relative;z-index:2" class="reveal">
+      <span class="page-tag">// 02 — Kenapa Pilih Kami</span>
+      <h1 class="page-title">Dirancang untuk<br/><em>Kemudahan</em> Anda</h1>
+      <p class="page-desc">E-Book ini bukan sekadar dokumen biasa. Setiap bab dirancang agar bisa langsung diterapkan, dengan bahasa yang mudah dipahami siapa pun.</p>
+    </div>
+  </div>
+
+  <!-- SLOGAN MARQUEE -->
+  <div class="slogan-banner">
+    <div class="slogan-scroll">
+      <span class="slogan-text">Buat pekerjaan semakin mudah dan efisien <span class="slogan-dot">✦</span></span>
+      <span class="slogan-text">Buat pekerjaan semakin mudah dan efisien <span class="slogan-dot">✦</span></span>
+      <span class="slogan-text">Buat pekerjaan semakin mudah dan efisien <span class="slogan-dot">✦</span></span>
+      <span class="slogan-text">Buat pekerjaan semakin mudah dan efisien <span class="slogan-dot">✦</span></span>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <section class="features-section">
+    <div class="features-grid reveal">
+      <div class="feature-card">
+        <div class="feature-num">01 —</div>
+        <div class="feature-icon">💰</div>
+        <div class="feature-title">Harga Terjangkau</div>
+        <div class="feature-desc">Investasi kecil untuk pengetahuan besar. Dapatkan panduan lengkap RDP dengan harga yang sangat bersahabat tanpa mengorbankan kualitas konten.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02 —</div>
+        <div class="feature-icon">🇮🇩</div>
+        <div class="feature-title">Bahasa Indonesia</div>
+        <div class="feature-desc">Seluruh konten ditulis dalam Bahasa Indonesia yang mudah dipahami. Tidak perlu struggle dengan dokumentasi berbahasa asing lagi.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03 —</div>
+        <div class="feature-icon">📱</div>
+        <div class="feature-title">Format PDF</div>
+        <div class="feature-desc">Bisa dibaca di mana saja — laptop, tablet, atau smartphone. Download sekali, baca selamanya tanpa perlu koneksi internet.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04 —</div>
+        <div class="feature-icon">⚡</div>
+        <div class="feature-title">Langsung Praktis</div>
+        <div class="feature-desc">Panduan step-by-step yang bisa langsung Anda terapkan. Dilengkapi screenshot dan contoh konfigurasi nyata dari lapangan.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">05 —</div>
+        <div class="feature-icon">🔒</div>
+        <div class="feature-title">Keamanan & Troubleshoot</div>
+        <div class="feature-desc">Tidak hanya setup dasar — buku ini juga membahas hardening keamanan RDP dan troubleshooting error yang sering ditemui.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">06 —</div>
+        <div class="feature-icon">♾️</div>
+        <div class="feature-title">Akses Seumur Hidup</div>
+        <div class="feature-desc">Bayar sekali, milik Anda selamanya. Termasuk update konten gratis jika ada revisi atau penambahan materi di masa depan.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA STRIP -->
+  <div class="cta-strip reveal">
+    <h2>Siap untuk mulai<br/><em>belajar RDP?</em></h2>
+    <div class="cta-btns">
+      <a href="produk.html" class="btn-primary">Lihat Produk →</a>
+      <a href="cara-beli.html" class="btn-outline">Cara Beli</a>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-brand">
+      <div class="logo">E·BOOK / RDP</div>
+      <p>Panduan terlengkap Remote Desktop Protocol dalam Bahasa Indonesia.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="keunggulan.html">Keunggulan</a></li>
+        <li><a href="produk.html">Produk</a></li>
+        <li><a href="about.html">Tentang Saya</a></li>
+        <li><a href="cara-beli.html">Cara Beli</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Hubungi Kami</h4>
+      <ul>
+        <li><a href="mailto:satriyaajib31@gmail.com"><span class="contact-icon">✉</span>satriyaajib31@gmail.com</a></li>
+        <li><a href="https://wa.me/6287704633053" target="_blank"><span class="contact-icon">💬</span>+62 877-0463-3053</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2024 <span>E-Book RDP</span>. All rights reserved.</p>
+    <p>Made with <span>♥</span> in Indonesia</p>
+  </div>
+  <script src="shared.js"></script>
+</body>
+</html>
