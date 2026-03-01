@@ -297,12 +297,29 @@
         <div class="quick-card-desc">Langkah mudah pembelian via WhatsApp</div>
         <div class="quick-card-arrow">→</div>
       </a>
-      <a href="faq.html" class="quick-card">
-        <div class="quick-card-icon">❓</div>
-        <div class="quick-card-title">FAQ</div>
-        <div class="quick-card-desc">Pertanyaan yang sering ditanyakan pembeli</div>
+      <a href="testimoni.html" class="quick-card">
+        <div class="quick-card-icon">💬</div>
+        <div class="quick-card-title">Testimoni</div>
+        <div class="quick-card-desc">Kata mereka yang sudah membaca E-Book ini</div>
         <div class="quick-card-arrow">→</div>
       </a>
+    </div>
+  </section>
+
+  <!-- TESTIMONI PREVIEW -->
+  <section id="testimoni-preview" style="padding:5rem 3rem; background:#0d0d0d;">
+    <div class="reveal" style="margin-bottom:3rem;">
+      <span class="section-tag">// Kata Mereka</span>
+      <h2 class="section-title">Testimoni <em>Pembeli</em></h2>
+    </div>
+    <div id="homeReviewsGrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);border:1px solid var(--border);">
+      <!-- Loaded via JS -->
+      <div style="background:var(--black);padding:2rem;"><div style="height:10px;background:var(--border);border-radius:2px;margin-bottom:0.8rem;width:50%;animation:shimmer 1.5s infinite;"></div><div style="height:10px;background:var(--border);border-radius:2px;margin-bottom:0.8rem;width:80%;animation:shimmer 1.5s infinite;"></div></div>
+      <div style="background:var(--black);padding:2rem;"><div style="height:10px;background:var(--border);border-radius:2px;margin-bottom:0.8rem;width:50%;animation:shimmer 1.5s infinite;"></div><div style="height:10px;background:var(--border);border-radius:2px;margin-bottom:0.8rem;width:80%;animation:shimmer 1.5s infinite;"></div></div>
+      <div style="background:var(--black);padding:2rem;"><div style="height:10px;background:var(--border);border-radius:2px;margin-bottom:0.8rem;width:50%;animation:shimmer 1.5s infinite;"></div><div style="height:10px;background:var(--border);border-radius:2px;margin-bottom:0.8rem;width:80%;animation:shimmer 1.5s infinite;"></div></div>
+    </div>
+    <div style="text-align:center;margin-top:2.5rem;">
+      <a href="testimoni.html" class="btn-outline">Lihat Semua Testimoni →</a>
     </div>
   </section>
 
@@ -320,6 +337,7 @@
         <li><a href="produk.html">Produk</a></li>
         <li><a href="about.html">Tentang Saya</a></li>
         <li><a href="cara-beli.html">Cara Beli</a></li>
+        <li><a href="testimoni.html">Testimoni</a></li>
         <li><a href="faq.html">FAQ</a></li>
       </ul>
     </div>
@@ -339,5 +357,57 @@
   <!-- WhatsApp Float -->
 
   <script src="shared.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ── SUPABASE TESTIMONI PREVIEW (Home) ────────
+    const SUPABASE_URL = 'https://huxlugluysostddzqvsy.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1eGx1Z2x1eXNvc3RkZHpxdnN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMDEyMTEsImV4cCI6MjA4NzY3NzIxMX0.YWG42cvNeeqHErFyrGYHkDNsd6eHCwAeSQPTM7oOZgQ';
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    async function loadHomeReviews() {
+      const grid = document.getElementById('homeReviewsGrid');
+      const { data, error } = await db
+        .from('testimoni')
+        .select('*')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false })
+        .limit(3);
+
+      if (error || !data || data.length === 0) {
+        grid.innerHTML = `<div style="grid-column:1/-1;background:var(--black);padding:3rem;text-align:center;"><p style="font-size:0.88rem;color:var(--muted);">Testimoni pertama akan segera hadir. <a href="testimoni.html" style="color:var(--accent);">Jadilah yang pertama →</a></p></div>`;
+        return;
+      }
+
+      const starStr = n => '★'.repeat(n) + '☆'.repeat(5 - n);
+      const initial = name => name.trim().charAt(0).toUpperCase();
+      const fmtDate = iso => new Date(iso).toLocaleDateString('id-ID', { day:'numeric', month:'long', year:'numeric' });
+
+      grid.innerHTML = data.map(r => `
+        <div style="background:var(--black);padding:2rem;display:flex;flex-direction:column;gap:1rem;position:relative;overflow:hidden;transition:background 0.2s;" onmouseover="this.style.background='#111'" onmouseout="this.style.background='var(--black)'">
+          <div style="color:#f5a623;font-size:0.9rem;">${starStr(r.rating)}</div>
+          <p style="font-size:0.88rem;color:var(--muted);line-height:1.75;font-style:italic;flex:1;">"${r.review}"</p>
+          <div style="display:flex;align-items:center;gap:0.8rem;padding-top:1rem;border-top:1px solid var(--border);">
+            <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),#1a5ce8);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.75rem;color:white;flex-shrink:0;">${initial(r.nama)}</div>
+            <div>
+              <div style="font-weight:700;font-size:0.85rem;">${r.nama}</div>
+              <div style="font-family:'Space Mono',monospace;font-size:0.6rem;color:var(--muted);">${fmtDate(r.created_at)}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    // Responsive grid for testimoni preview
+    const previewGrid = document.getElementById('homeReviewsGrid');
+    function setPreviewGrid() {
+      if (window.innerWidth <= 600) previewGrid.style.gridTemplateColumns = '1fr';
+      else if (window.innerWidth <= 900) previewGrid.style.gridTemplateColumns = 'repeat(2,1fr)';
+      else previewGrid.style.gridTemplateColumns = 'repeat(3,1fr)';
+    }
+    setPreviewGrid();
+    window.addEventListener('resize', setPreviewGrid);
+
+    loadHomeReviews();
+  </script>
 </body>
 </html>

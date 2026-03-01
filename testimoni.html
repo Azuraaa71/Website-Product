@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Testimoni — E-Book RDP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script>
+    (function(){
+      if(localStorage.getItem('ebook-rdp-theme') === 'light')
+        document.documentElement.setAttribute('data-theme','light');
+    })();
+  </script>
+  <style>
+    /* ── LAYOUT ── */
+    .testimoni-wrapper {
+      padding: 5rem 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── FORM SECTION ── */
+    .form-shell {
+      border: 1px solid var(--border);
+      position: relative;
+      max-width: 680px;
+      margin: 0 auto 6rem;
+    }
+    .form-shell::before {
+      content: 'TULIS REVIEW';
+      position: absolute; top: -0.55rem; left: 2rem;
+      background: var(--black);
+      padding: 0 0.8rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; color: var(--accent); letter-spacing: 0.15em;
+    }
+    body.light .form-shell::before { background: var(--black); }
+
+    .form-inner { padding: 2.5rem; }
+
+    .form-group { margin-bottom: 1.8rem; }
+    .form-label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; color: var(--accent);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 0.7rem;
+    }
+    .form-input,
+    .form-textarea {
+      width: 100%;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--white);
+      font-family: 'Syne', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.85rem 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+      resize: none;
+    }
+    .form-input:focus,
+    .form-textarea:focus { border-color: var(--accent); }
+    .form-input::placeholder,
+    .form-textarea::placeholder { color: var(--muted); font-size: 0.85rem; }
+    .form-textarea { min-height: 120px; line-height: 1.6; }
+
+    /* Star rating */
+    .star-group { display: flex; gap: 0.4rem; flex-direction: row-reverse; justify-content: flex-end; }
+    .star-group input { display: none; }
+    .star-group label {
+      font-size: 1.6rem; cursor: pointer;
+      color: var(--border);
+      transition: color 0.15s, transform 0.15s;
+      filter: grayscale(1);
+    }
+    .star-group input:checked ~ label,
+    .star-group label:hover,
+    .star-group label:hover ~ label {
+      color: #f5a623;
+      filter: grayscale(0);
+      transform: scale(1.15);
+    }
+
+    /* Submit button */
+    .form-submit {
+      width: 100%;
+      background: var(--accent); color: white;
+      border: none; cursor: pointer;
+      font-family: 'Syne', sans-serif;
+      font-weight: 700; font-size: 0.85rem;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 1rem;
+      transition: background 0.2s, transform 0.15s;
+      clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);
+    }
+    .form-submit:hover:not(:disabled) { background: #c4401a; transform: translateY(-2px); }
+    .form-submit:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    /* Status messages */
+    .form-status {
+      margin-top: 1rem; padding: 0.9rem 1rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.06em;
+      display: none;
+    }
+    .form-status.success {
+      display: block;
+      border: 1px solid rgba(34,197,94,0.4);
+      background: rgba(34,197,94,0.06);
+      color: #4ade80;
+    }
+    .form-status.error {
+      display: block;
+      border: 1px solid rgba(232,80,26,0.4);
+      background: rgba(232,80,26,0.06);
+      color: var(--accent);
+    }
+
+    /* ── REVIEWS GRID ── */
+    .reviews-header { margin-bottom: 3rem; }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+    }
+
+    .review-card {
+      background: var(--bg-card, var(--black));
+      padding: 2rem;
+      display: flex; flex-direction: column; gap: 1rem;
+      position: relative; overflow: hidden;
+      transition: background 0.2s;
+    }
+    .review-card:hover { background: var(--bg-card-hover, #111); }
+    .review-card::after {
+      content: '"';
+      position: absolute; bottom: -0.5rem; right: 1rem;
+      font-family: 'Instrument Serif', serif;
+      font-size: 5rem; color: var(--accent);
+      opacity: 0.06; line-height: 1; pointer-events: none;
+    }
+
+    .review-stars { color: #f5a623; font-size: 0.9rem; letter-spacing: 0.1em; }
+
+    .review-text {
+      font-size: 0.88rem; color: var(--muted);
+      line-height: 1.75; flex: 1;
+      font-style: italic;
+    }
+
+    .review-footer {
+      display: flex; align-items: center; gap: 0.8rem;
+      padding-top: 1rem; border-top: 1px solid var(--border);
+    }
+    .review-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #1a5ce8);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.75rem; color: white;
+      flex-shrink: 0;
+    }
+    .review-name {
+      font-weight: 700; font-size: 0.85rem;
+      letter-spacing: -0.01em;
+    }
+    .review-date {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; color: var(--muted);
+      margin-top: 0.1rem;
+    }
+
+    /* Empty state */
+    .reviews-empty {
+      grid-column: 1 / -1;
+      padding: 4rem; text-align: center;
+      background: var(--bg-card, var(--black));
+    }
+    .reviews-empty p {
+      font-size: 0.88rem; color: var(--muted); line-height: 1.7;
+    }
+    .reviews-empty span { font-size: 2rem; display: block; margin-bottom: 1rem; }
+
+    /* Loading skeleton */
+    .skeleton {
+      background: var(--bg-card, var(--black));
+      padding: 2rem;
+    }
+    .skeleton-line {
+      height: 12px; background: var(--border);
+      border-radius: 2px; margin-bottom: 0.8rem;
+      animation: shimmer 1.5s infinite;
+    }
+    .skeleton-line.w60 { width: 60%; }
+    .skeleton-line.w80 { width: 80%; }
+    .skeleton-line.w40 { width: 40%; }
+    @keyframes shimmer {
+      0%,100% { opacity: 0.4; }
+      50%      { opacity: 0.8; }
+    }
+
+    @media (max-width: 900px) {
+      .testimoni-wrapper { padding: 4rem 1.5rem; }
+      .reviews-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 580px) {
+      .reviews-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">E·BOOK / RDP</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="keunggulan.html">Keunggulan</a></li>
+      <li><a href="produk.html">Produk</a></li>
+      <li><a href="about.html">Tentang</a></li>
+      <li><a href="cara-beli.html">Cara Beli</a></li>
+      <li><a href="testimoni.html" class="active">Testimoni</a></li>
+      <li><a href="faq.html">FAQ</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <svg class="icon-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="index.html">Home</a>
+    <a href="keunggulan.html">Keunggulan</a>
+    <a href="produk.html">Produk</a>
+    <a href="about.html">Tentang</a>
+    <a href="cara-beli.html">Cara Beli</a>
+    <a href="testimoni.html" class="active">Testimoni</a>
+    <a href="faq.html">FAQ</a>
+  </div>
+
+  <!-- PAGE HERO -->
+  <div class="page-hero">
+    <div class="page-hero-bg"></div>
+    <div style="position:relative;z-index:2" class="reveal">
+      <span class="page-tag">// Kata Mereka</span>
+      <h1 class="page-title">Testimoni<br/><em>Pembeli Nyata</em></h1>
+      <p class="page-desc">Sudah beli dan merasakan manfaatnya? Tinggalkan review kamu — bantu pembeli lain mengambil keputusan.</p>
+    </div>
+  </div>
+
+  <div class="testimoni-wrapper">
+
+    <!-- FORM -->
+    <div class="reveal">
+      <span class="section-tag">// Bagikan Pengalaman Kamu</span>
+      <h2 class="section-title" style="margin-bottom:2.5rem;">Tulis <em>Review</em></h2>
+    </div>
+
+    <div class="form-shell reveal">
+      <div class="form-inner">
+        <div class="form-group">
+          <label class="form-label" for="nama">Nama Kamu</label>
+          <input class="form-input" type="text" id="nama" placeholder="Contoh: Budi Santoso" maxlength="60" required/>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Rating</label>
+          <div class="star-group">
+            <input type="radio" name="rating" id="s5" value="5"/>
+            <label for="s5" title="5 bintang">★</label>
+            <input type="radio" name="rating" id="s4" value="4"/>
+            <label for="s4" title="4 bintang">★</label>
+            <input type="radio" name="rating" id="s3" value="3"/>
+            <label for="s3" title="3 bintang">★</label>
+            <input type="radio" name="radio" id="s2" value="2"/>
+            <label for="s2" title="2 bintang">★</label>
+            <input type="radio" name="rating" id="s1" value="1"/>
+            <label for="s1" title="1 bintang">★</label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="review">Review Kamu</label>
+          <textarea class="form-textarea" id="review" placeholder="Ceritakan pengalaman kamu membaca E-Book ini..." maxlength="500" required></textarea>
+        </div>
+
+        <button class="form-submit" id="submitBtn" type="button">
+          Kirim Review →
+        </button>
+        <div class="form-status" id="formStatus"></div>
+      </div>
+    </div>
+
+    <!-- REVIEWS LIST -->
+    <div class="reviews-header reveal">
+      <span class="section-tag">// Review Pembeli</span>
+      <h2 class="section-title">Apa Kata <em>Mereka?</em></h2>
+    </div>
+
+    <div class="reviews-grid" id="reviewsGrid">
+      <!-- Loading skeleton -->
+      <div class="skeleton">
+        <div class="skeleton-line w40"></div>
+        <div class="skeleton-line w80"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+      <div class="skeleton">
+        <div class="skeleton-line w40"></div>
+        <div class="skeleton-line w80"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+      <div class="skeleton">
+        <div class="skeleton-line w40"></div>
+        <div class="skeleton-line w80"></div>
+        <div class="skeleton-line w60"></div>
+      </div>
+    </div>
+
+  </div><!-- /testimoni-wrapper -->
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-brand">
+      <div class="logo">E·BOOK / RDP</div>
+      <p>Panduan terlengkap Remote Desktop Protocol dalam Bahasa Indonesia.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigasi</h4>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="keunggulan.html">Keunggulan</a></li>
+        <li><a href="produk.html">Produk</a></li>
+        <li><a href="about.html">Tentang Saya</a></li>
+        <li><a href="cara-beli.html">Cara Beli</a></li>
+        <li><a href="testimoni.html">Testimoni</a></li>
+        <li><a href="faq.html">FAQ</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Hubungi Kami</h4>
+      <ul>
+        <li><a href="mailto:satriyaajib31@gmail.com"><span class="contact-icon">✉</span>satriyaajib31@gmail.com</a></li>
+        <li><a href="https://wa.me/6287704633053" target="_blank"><span class="contact-icon">💬</span>+62 877-0463-3053</a></li>
+      </ul>
+    </div>
+  </footer>
+  <div class="footer-bottom">
+    <p>© 2024 <span>E-Book RDP</span>. All rights reserved.</p>
+    <p>Made with <span>♥</span> in Indonesia</p>
+  </div>
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="shared.js"></script>
+  <script>
+    // ── SUPABASE CONFIG ──────────────────────────
+    const SUPABASE_URL  = 'https://huxlugluysostddzqvsy.supabase.co';
+    const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1eGx1Z2x1eXNvc3RkZHpxdnN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMDEyMTEsImV4cCI6MjA4NzY3NzIxMX0.YWG42cvNeeqHErFyrGYHkDNsd6eHCwAeSQPTM7oOZgQ';
+    const { createClient } = supabase;
+    const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ── HELPERS ──────────────────────────────────
+    function renderStars(n) {
+      return '★'.repeat(n) + '☆'.repeat(5 - n);
+    }
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'long', year: 'numeric'
+      });
+    }
+
+    function getInitial(name) {
+      return name.trim().charAt(0).toUpperCase();
+    }
+
+    // ── LOAD REVIEWS ─────────────────────────────
+    async function loadReviews() {
+      const grid = document.getElementById('reviewsGrid');
+
+      const { data, error } = await db
+        .from('testimoni')
+        .select('*')
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        grid.innerHTML = `
+          <div class="reviews-empty">
+            <span>⚠️</span>
+            <p>Gagal memuat testimoni. Silakan refresh halaman.</p>
+          </div>`;
+        return;
+      }
+
+      if (!data || data.length === 0) {
+        grid.innerHTML = `
+          <div class="reviews-empty">
+            <span>💬</span>
+            <p>Belum ada testimoni yang ditampilkan.<br/>Jadilah yang pertama menulis review!</p>
+          </div>`;
+        return;
+      }
+
+      grid.innerHTML = data.map((r, i) => `
+        <div class="review-card reveal" data-delay="${i * 60}">
+          <div class="review-stars">${renderStars(r.rating)}</div>
+          <p class="review-text">"${r.review}"</p>
+          <div class="review-footer">
+            <div class="review-avatar">${getInitial(r.nama)}</div>
+            <div>
+              <div class="review-name">${r.nama}</div>
+              <div class="review-date">${formatDate(r.created_at)}</div>
+            </div>
+          </div>
+        </div>
+      `).join('');
+
+      // Trigger reveal animation for new cards
+      document.querySelectorAll('.review-card.reveal').forEach(el => {
+        setTimeout(() => el.classList.add('visible'), parseInt(el.dataset.delay || 0));
+      });
+    }
+
+    // ── SUBMIT FORM ──────────────────────────────
+    document.getElementById('submitBtn').addEventListener('click', async () => {
+      const nama    = document.getElementById('nama').value.trim();
+      const review  = document.getElementById('review').value.trim();
+      const ratingEl = document.querySelector('input[name="rating"]:checked');
+      const status  = document.getElementById('formStatus');
+      const btn     = document.getElementById('submitBtn');
+
+      // Validasi
+      if (!nama) {
+        showStatus('error', '⚠ Nama tidak boleh kosong.');
+        return;
+      }
+      if (!ratingEl) {
+        showStatus('error', '⚠ Pilih rating bintang terlebih dahulu.');
+        return;
+      }
+      if (review.length < 10) {
+        showStatus('error', '⚠ Review minimal 10 karakter.');
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = 'Mengirim...';
+
+      const { error } = await db.from('testimoni').insert([{
+        nama,
+        rating: parseInt(ratingEl.value),
+        review,
+        status: 'pending'
+      }]);
+
+      if (error) {
+        showStatus('error', '✕ Gagal mengirim. Coba beberapa saat lagi.');
+        btn.disabled = false;
+        btn.textContent = 'Kirim Review →';
+        return;
+      }
+
+      showStatus('success', '✓ Review berhasil dikirim! Akan ditampilkan setelah disetujui.');
+      document.getElementById('nama').value    = '';
+      document.getElementById('review').value  = '';
+      document.querySelectorAll('input[name="rating"]').forEach(r => r.checked = false);
+      btn.disabled = false;
+      btn.textContent = 'Kirim Review →';
+    });
+
+    function showStatus(type, msg) {
+      const el = document.getElementById('formStatus');
+      el.className = `form-status ${type}`;
+      el.textContent = msg;
+    }
+
+    // ── INIT ─────────────────────────────────────
+    loadReviews();
+  </script>
+</body>
+</html>
