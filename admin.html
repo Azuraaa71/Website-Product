@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel — E-Book RDP</title>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0a0a0a;
+      --white:   #f5f3ee;
+      --muted:   #7a7a72;
+      --border:  rgba(245,243,238,0.12);
+      --accent:  #e8501a;
+      --green:   #22c55e;
+      --red:     #ef4444;
+      --yellow:  #f5a623;
+      --card:    #111111;
+    }
+
+    body {
+      font-family: 'Syne', sans-serif;
+      background: var(--black);
+      color: var(--white);
+      min-height: 100vh;
+    }
+
+    /* ── LOGIN SCREEN ── */
+    #loginScreen {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .login-box {
+      border: 1px solid var(--border);
+      padding: 3rem; width: 100%; max-width: 400px;
+      position: relative;
+    }
+    .login-box::before {
+      content: 'ADMIN ACCESS';
+      position: absolute; top: -0.55rem; left: 2rem;
+      background: var(--black); padding: 0 0.8rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; color: var(--accent); letter-spacing: 0.15em;
+    }
+    .login-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.85rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .login-title {
+      font-weight: 800; font-size: 1.8rem;
+      letter-spacing: -0.02em; margin-bottom: 0.5rem;
+    }
+    .login-sub {
+      font-size: 0.82rem; color: var(--muted);
+      margin-bottom: 2rem; line-height: 1.6;
+    }
+    .login-label {
+      display: block;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; color: var(--accent);
+      letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 0.6rem;
+    }
+    .login-input {
+      width: 100%; background: transparent;
+      border: 1px solid var(--border); color: var(--white);
+      font-family: 'Syne', sans-serif; font-size: 0.95rem;
+      padding: 0.85rem 1rem; outline: none;
+      transition: border-color 0.2s; margin-bottom: 1.5rem;
+    }
+    .login-input:focus { border-color: var(--accent); }
+    .login-btn {
+      width: 100%; background: var(--accent); color: white;
+      border: none; cursor: pointer;
+      font-family: 'Syne', sans-serif; font-weight: 700;
+      font-size: 0.85rem; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 1rem;
+      transition: background 0.2s;
+      clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);
+    }
+    .login-btn:hover { background: #c4401a; }
+    .login-error {
+      margin-top: 1rem; padding: 0.8rem 1rem;
+      border: 1px solid rgba(239,68,68,0.4);
+      background: rgba(239,68,68,0.06);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; color: var(--red);
+      display: none;
+    }
+    .login-error.show { display: block; }
+
+    /* ── ADMIN PANEL ── */
+    #adminPanel { display: none; }
+
+    /* Topbar */
+    .topbar {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(10,10,10,0.95);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .topbar-left { display: flex; align-items: center; gap: 1rem; }
+    .topbar-logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.8rem; color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .topbar-divider {
+      width: 1px; height: 20px; background: var(--border);
+    }
+    .topbar-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; color: var(--muted);
+      letter-spacing: 0.08em; text-transform: uppercase;
+    }
+    .logout-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; color: var(--muted);
+      background: none; border: 1px solid var(--border);
+      padding: 0.4rem 0.9rem; cursor: pointer;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .logout-btn:hover { border-color: var(--red); color: var(--red); }
+
+    /* Stats bar */
+    .stats-bar {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 1px; background: var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat-card {
+      background: var(--black); padding: 1.5rem 2rem;
+      display: flex; flex-direction: column; gap: 0.3rem;
+    }
+    .stat-card-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 2rem; font-weight: 700; line-height: 1;
+    }
+    .stat-card-num.pending { color: var(--yellow); }
+    .stat-card-num.approved { color: var(--green); }
+    .stat-card-num.total { color: var(--white); }
+    .stat-card-num.avg { color: var(--accent); }
+    .stat-card-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+
+    /* Filter tabs */
+    .filter-bar {
+      padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase;
+    }
+    .filter-tabs { display: flex; gap: 0.5rem; }
+    .filter-tab {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 0.4rem 1rem;
+      border: 1px solid var(--border); background: none;
+      color: var(--muted); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .filter-tab:hover { border-color: var(--accent); color: var(--accent); }
+    .filter-tab.active { border-color: var(--accent); background: var(--accent); color: white; }
+    .refresh-btn {
+      margin-left: auto;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; letter-spacing: 0.08em;
+      text-transform: uppercase; padding: 0.4rem 1rem;
+      border: 1px solid var(--border); background: none;
+      color: var(--muted); cursor: pointer;
+      transition: all 0.2s;
+    }
+    .refresh-btn:hover { border-color: var(--white); color: var(--white); }
+
+    /* Table */
+    .table-wrap { padding: 2rem; overflow-x: auto; }
+    .admin-table {
+      width: 100%; border-collapse: collapse;
+      border: 1px solid var(--border);
+    }
+    .admin-table th {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; color: var(--accent);
+      letter-spacing: 0.12em; text-transform: uppercase;
+      padding: 1rem 1.2rem; text-align: left;
+      border-bottom: 1px solid var(--border);
+      background: #0d0d0d; white-space: nowrap;
+    }
+    .admin-table td {
+      padding: 1.1rem 1.2rem; font-size: 0.85rem;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+    .admin-table tr:last-child td { border-bottom: none; }
+    .admin-table tr:hover td { background: var(--card); }
+
+    /* Status badge */
+    .badge {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.58rem; letter-spacing: 0.1em;
+      text-transform: uppercase; padding: 0.25rem 0.6rem;
+      display: inline-block;
+    }
+    .badge.pending  { border: 1px solid var(--yellow); color: var(--yellow); background: rgba(245,166,35,0.08); }
+    .badge.approved { border: 1px solid var(--green);  color: var(--green);  background: rgba(34,197,94,0.08); }
+
+    /* Stars */
+    .stars { color: var(--yellow); font-size: 0.8rem; }
+
+    /* Review text */
+    .review-text {
+      max-width: 320px; line-height: 1.6;
+      color: var(--muted); font-size: 0.82rem;
+    }
+
+    /* Action buttons */
+    .action-btns { display: flex; gap: 0.5rem; flex-wrap: nowrap; }
+    .action-btn {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.6rem; letter-spacing: 0.06em;
+      text-transform: uppercase; padding: 0.4rem 0.8rem;
+      border: none; cursor: pointer; white-space: nowrap;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .action-btn:hover { opacity: 0.8; transform: translateY(-1px); }
+    .action-btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .btn-approve { background: var(--green);  color: #0a0a0a; font-weight: 700; }
+    .btn-reject  { background: #2a2a2a; color: var(--muted); }
+    .btn-delete  { background: var(--red); color: white; font-weight: 700; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center; padding: 5rem 2rem;
+    }
+    .empty-state span { font-size: 2.5rem; display: block; margin-bottom: 1rem; }
+    .empty-state p { font-size: 0.88rem; color: var(--muted); }
+
+    /* Loading */
+    .loading-row td {
+      text-align: center; padding: 3rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      padding: 0.9rem 1.5rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem; letter-spacing: 0.06em;
+      z-index: 9999; transform: translateY(100px);
+      opacity: 0; transition: all 0.3s ease;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: var(--green); color: #0a0a0a; }
+    .toast.error   { background: var(--red); color: white; }
+
+    /* Avatar initial */
+    .avatar-init {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent), #1a5ce8);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.75rem; color: white;
+      flex-shrink: 0; margin-right: 0.6rem;
+    }
+    .name-cell { display: flex; align-items: center; white-space: nowrap; }
+
+    /* Date */
+    .date-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 0.65rem; color: var(--muted);
+    }
+
+    /* Confirm overlay */
+    .confirm-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 9998; display: none;
+    }
+    .confirm-overlay.show { display: flex; }
+    .confirm-box {
+      border: 1px solid var(--border);
+      background: #111; padding: 2.5rem;
+      max-width: 400px; width: 90%;
+      position: relative;
+    }
+    .confirm-box::before {
+      content: 'KONFIRMASI';
+      position: absolute; top: -0.55rem; left: 2rem;
+      background: #111; padding: 0 0.8rem;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.62rem; color: var(--red); letter-spacing: 0.15em;
+    }
+    .confirm-box h3 { font-size: 1.2rem; margin-bottom: 0.8rem; }
+    .confirm-box p  { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-bottom: 2rem; }
+    .confirm-btns { display: flex; gap: 1rem; }
+    .confirm-btns button {
+      flex: 1; padding: 0.8rem; border: none; cursor: pointer;
+      font-family: 'Space Mono', monospace;
+      font-size: 0.7rem; letter-spacing: 0.08em; text-transform: uppercase;
+      font-weight: 700; transition: opacity 0.2s;
+    }
+    .confirm-btns button:hover { opacity: 0.85; }
+    .btn-confirm-yes { background: var(--red); color: white; }
+    .btn-confirm-no  { background: #2a2a2a; color: var(--muted); }
+
+    @media (max-width: 768px) {
+      .stats-bar { grid-template-columns: 1fr 1fr; }
+      .table-wrap { padding: 1rem; }
+      .topbar { padding: 0.8rem 1rem; }
+      .filter-bar { padding: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── LOGIN SCREEN ── -->
+  <div id="loginScreen">
+    <div class="login-box">
+      <div class="login-logo">E·BOOK / RDP</div>
+      <h1 class="login-title">Admin Panel</h1>
+      <p class="login-sub">Masukkan password untuk mengakses panel manajemen testimoni.</p>
+      <label class="login-label" for="passwordInput">Password</label>
+      <input class="login-input" type="password" id="passwordInput" placeholder="••••••••" autocomplete="current-password"/>
+      <button class="login-btn" id="loginBtn">Masuk →</button>
+      <div class="login-error" id="loginError">✕ Password salah. Coba lagi.</div>
+    </div>
+  </div>
+
+  <!-- ── ADMIN PANEL ── -->
+  <div id="adminPanel">
+
+    <!-- Topbar -->
+    <div class="topbar">
+      <div class="topbar-left">
+        <div class="topbar-logo">E·BOOK / RDP</div>
+        <div class="topbar-divider"></div>
+        <div class="topbar-title">Admin Panel — Manajemen Testimoni</div>
+      </div>
+      <button class="logout-btn" id="logoutBtn">Logout →</button>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-card-num total" id="statTotal">—</div>
+        <div class="stat-card-label">Total Testimoni</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num pending" id="statPending">—</div>
+        <div class="stat-card-label">Menunggu Review</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num approved" id="statApproved">—</div>
+        <div class="stat-card-label">Sudah Approved</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-num avg" id="statAvg">—</div>
+        <div class="stat-card-label">Rating Rata-rata</div>
+      </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-bar">
+      <span class="filter-label">Filter:</span>
+      <div class="filter-tabs">
+        <button class="filter-tab active" data-filter="all">Semua</button>
+        <button class="filter-tab" data-filter="pending">Pending</button>
+        <button class="filter-tab" data-filter="approved">Approved</button>
+      </div>
+      <button class="refresh-btn" id="refreshBtn">↺ Refresh</button>
+    </div>
+
+    <!-- Table -->
+    <div class="table-wrap">
+      <table class="admin-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nama</th>
+            <th>Rating</th>
+            <th>Review</th>
+            <th>Status</th>
+            <th>Tanggal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody">
+          <tr class="loading-row">
+            <td colspan="7">MEMUAT DATA...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div><!-- /adminPanel -->
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Confirm Dialog -->
+  <div class="confirm-overlay" id="confirmOverlay">
+    <div class="confirm-box">
+      <h3 id="confirmTitle">Hapus Testimoni?</h3>
+      <p id="confirmMsg">Tindakan ini tidak bisa dibatalkan.</p>
+      <div class="confirm-btns">
+        <button class="btn-confirm-yes" id="confirmYes">Ya, Hapus</button>
+        <button class="btn-confirm-no" id="confirmNo">Batal</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUPABASE -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    // ── CONFIG ───────────────────────────────────
+    const SUPABASE_URL = 'https://huxlugluysostddzqvsy.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh1eGx1Z2x1eXNvc3RkZHpxdnN5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxMDEyMTEsImV4cCI6MjA4NzY3NzIxMX0.YWG42cvNeeqHErFyrGYHkDNsd6eHCwAeSQPTM7oOZgQ';
+    const ADMIN_PASSWORD = 'rdpadmin2024'; // ← Ganti password ini!
+
+    const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ── STATE ────────────────────────────────────
+    let allData = [];
+    let currentFilter = 'all';
+    let confirmCallback = null;
+
+    // ── LOGIN ────────────────────────────────────
+    const loginScreen = document.getElementById('loginScreen');
+    const adminPanel  = document.getElementById('adminPanel');
+    const passwordInput = document.getElementById('passwordInput');
+    const loginError  = document.getElementById('loginError');
+
+    // Check saved session
+    if (sessionStorage.getItem('rdp-admin') === 'true') showPanel();
+
+    document.getElementById('loginBtn').addEventListener('click', doLogin);
+    passwordInput.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+
+    function doLogin() {
+      const val = passwordInput.value.trim();
+      if (val === ADMIN_PASSWORD) {
+        sessionStorage.setItem('rdp-admin', 'true');
+        loginError.classList.remove('show');
+        showPanel();
+      } else {
+        loginError.classList.add('show');
+        passwordInput.value = '';
+        passwordInput.focus();
+      }
+    }
+
+    function showPanel() {
+      loginScreen.style.display = 'none';
+      adminPanel.style.display = 'block';
+      loadData();
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      sessionStorage.removeItem('rdp-admin');
+      location.reload();
+    });
+
+    // ── LOAD DATA ────────────────────────────────
+    async function loadData() {
+      document.getElementById('tableBody').innerHTML = '<tr class="loading-row"><td colspan="7">MEMUAT DATA...</td></tr>';
+
+      const { data, error } = await db
+        .from('testimoni')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        showToast('Gagal memuat data: ' + error.message, 'error');
+        return;
+      }
+
+      allData = data || [];
+      updateStats();
+      renderTable();
+    }
+
+    // ── STATS ────────────────────────────────────
+    function updateStats() {
+      const total    = allData.length;
+      const pending  = allData.filter(r => r.status === 'pending').length;
+      const approved = allData.filter(r => r.status === 'approved').length;
+      const avgRating = total > 0
+        ? (allData.reduce((sum, r) => sum + r.rating, 0) / total).toFixed(1)
+        : '—';
+
+      document.getElementById('statTotal').textContent    = total;
+      document.getElementById('statPending').textContent  = pending;
+      document.getElementById('statApproved').textContent = approved;
+      document.getElementById('statAvg').textContent      = avgRating !== '—' ? avgRating + ' ★' : '—';
+    }
+
+    // ── RENDER TABLE ─────────────────────────────
+    function renderTable() {
+      const filtered = currentFilter === 'all'
+        ? allData
+        : allData.filter(r => r.status === currentFilter);
+
+      const tbody = document.getElementById('tableBody');
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="7">
+              <div class="empty-state">
+                <span>📭</span>
+                <p>Tidak ada testimoni dengan filter ini.</p>
+              </div>
+            </td>
+          </tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(r => `
+        <tr data-id="${r.id}">
+          <td><span style="font-family:'Space Mono',monospace;font-size:0.72rem;color:var(--muted);">#${r.id}</span></td>
+          <td>
+            <div class="name-cell">
+              <div class="avatar-init">${r.nama.charAt(0).toUpperCase()}</div>
+              <span style="font-weight:700;">${escHtml(r.nama)}</span>
+            </div>
+          </td>
+          <td><div class="stars">${'★'.repeat(r.rating)}${'☆'.repeat(5-r.rating)}</div></td>
+          <td><div class="review-text">${escHtml(r.review)}</div></td>
+          <td><span class="badge ${r.status}">${r.status}</span></td>
+          <td><div class="date-text">${formatDate(r.created_at)}</div></td>
+          <td>
+            <div class="action-btns">
+              ${r.status === 'pending'
+                ? `<button class="action-btn btn-approve" onclick="approveRow(${r.id})">✓ Approve</button>`
+                : `<button class="action-btn btn-reject"  onclick="rejectRow(${r.id})">↩ Pending</button>`
+              }
+              <button class="action-btn btn-delete" onclick="deleteRow(${r.id}, '${escHtml(r.nama)}')">✕ Hapus</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    // ── FILTER ───────────────────────────────────
+    document.querySelectorAll('.filter-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        currentFilter = tab.dataset.filter;
+        renderTable();
+      });
+    });
+
+    document.getElementById('refreshBtn').addEventListener('click', loadData);
+
+    // ── APPROVE ──────────────────────────────────
+    async function approveRow(id) {
+      const btn = document.querySelector(`tr[data-id="${id}"] .btn-approve`);
+      if (btn) { btn.disabled = true; btn.textContent = '...'; }
+
+      const { error } = await db
+        .from('testimoni')
+        .update({ status: 'approved' })
+        .eq('id', id);
+
+      if (error) {
+        showToast('Gagal approve: ' + error.message, 'error');
+        if (btn) { btn.disabled = false; btn.textContent = '✓ Approve'; }
+        return;
+      }
+
+      showToast('✓ Testimoni berhasil di-approve!', 'success');
+      await loadData();
+    }
+
+    // ── REJECT (ke pending) ───────────────────────
+    async function rejectRow(id) {
+      const { error } = await db
+        .from('testimoni')
+        .update({ status: 'pending' })
+        .eq('id', id);
+
+      if (error) { showToast('Gagal update: ' + error.message, 'error'); return; }
+
+      showToast('↩ Testimoni dikembalikan ke pending.', 'success');
+      await loadData();
+    }
+
+    // ── DELETE ───────────────────────────────────
+    function deleteRow(id, nama) {
+      showConfirm(
+        'Hapus Testimoni?',
+        `Review dari <strong>${nama}</strong> akan dihapus permanen dan tidak bisa dikembalikan.`,
+        async () => {
+          const { error } = await db
+            .from('testimoni')
+            .delete()
+            .eq('id', id);
+
+          if (error) { showToast('Gagal hapus: ' + error.message, 'error'); return; }
+
+          showToast('✕ Testimoni berhasil dihapus.', 'success');
+          await loadData();
+        }
+      );
+    }
+
+    // ── CONFIRM DIALOG ───────────────────────────
+    function showConfirm(title, msg, callback) {
+      document.getElementById('confirmTitle').textContent = title;
+      document.getElementById('confirmMsg').innerHTML = msg;
+      document.getElementById('confirmOverlay').classList.add('show');
+      confirmCallback = callback;
+    }
+
+    document.getElementById('confirmYes').addEventListener('click', () => {
+      document.getElementById('confirmOverlay').classList.remove('show');
+      if (confirmCallback) confirmCallback();
+      confirmCallback = null;
+    });
+
+    document.getElementById('confirmNo').addEventListener('click', () => {
+      document.getElementById('confirmOverlay').classList.remove('show');
+      confirmCallback = null;
+    });
+
+    // ── TOAST ────────────────────────────────────
+    let toastTimer;
+    function showToast(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.className = `toast ${type} show`;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    // ── HELPERS ──────────────────────────────────
+    function escHtml(str) {
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('id-ID', {
+        day: 'numeric', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+  </script>
+</body>
+</html>
